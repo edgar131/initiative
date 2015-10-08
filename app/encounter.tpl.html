@@ -1,0 +1,44 @@
+<md-content>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h3>
+                <span>Initiative</span>
+            </h3>
+        </div>
+    </md-toolbar>
+    <md-button ng-click="encounterCtrl.addParticipant($event)" class="md-raised">
+        <md-icon md-svg-src="content:add_box" class="md-primary"></md-icon>
+        Add Participant
+    </md-button>
+    <md-button ng-click="encounterCtrl.saveParty($event)" class="md-raised">
+        <md-icon md-svg-src="content:add_box" class="md-primary"></md-icon>
+        Party Management
+    </md-button>
+    <md-button ng-click="encounterCtrl.next($event)" class="md-raised">
+        <md-icon md-svg-src="av:play_circle_outline" class="md-primary"></md-icon>
+        Next
+    </md-button>
+    <div layout="row" class="participant md-primary" ng-class="{'active':$index === encounterCtrl.activeIndex}" ng-repeat="participant in encounterCtrl.participants | orderBy:['-initiative', '-stats.dex']">
+        <div layout="column">
+            <div layout="row" class="info">
+                <span class="name">{{participant.data.name}}&nbsp;</span>
+                <span ng-class="{'hp-warning': participant.combat.hp <= 0}" class="hp">({{participant.combat.hp}}<span ng-show="participant.data.maxhp">/{{participant.data.maxhp}}</span>)&nbsp;</span>
+                <span class="ac" ng-show="participant.data.ac">AC: {{participant.data.ac}}</span>
+            </div>
+            <div layout="row" class="stats" ng-show="participant.data.stats">
+                <span ng-repeat="(key, stat) in participant.data.stats" ng-show="stat>=0" class="stat">{{key | uppercase}}: {{stat}}<sup>({{encounterCtrl.calcMod(stat)}})</sup></span>
+            </div>
+        </div>
+        <div layout="row" layout-align="center center" layout-fill class="hpmod">
+            <md-button class="md-raised md-primary" ng-click="encounterCtrl.modHP(participant, damage);damage=undefined;">Heal</md-button>
+            <input style="vertical-align:middle;width:60px;" type="number" ng-model="damage">
+            <md-button class="md-raised md-warn" ng-click="encounterCtrl.modHP(participant, -damage);damage=undefined;">Damage</md-button>
+        </div>
+        <div layout="row" layout-align="end center" layout-fill>
+            <div class="controls">
+                <md-icon ng-click="encounterCtrl.editParticipant($event, participant)" md-svg-src="editor:mode_edit"></md-icon>
+                <md-icon ng-click="encounterCtrl.removeParticipant(participant)" md-svg-src="content:remove_circle_outline"></md-icon>
+            </div>
+        </div>
+    </div>
+</md-content>

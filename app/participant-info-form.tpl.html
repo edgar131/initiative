@@ -1,0 +1,43 @@
+<md-input-container>
+    <label>Name</label>
+    <input required type="text" name="name" ng-model="participant.data.name">
+    <div ng-messages="pform.name.$error" ng-if="pform.name.$touched">
+        <div ng-message="required" ng-show="pform.name.$error">You need a name</div>
+    </div>
+</md-input-container>
+<div layout="row" flex>
+    <md-input-container>
+        <label>AC</label>
+        <input type="number" ng-model="participant.data.ac">
+    </md-input-container>
+    <md-input-container>
+        <label>Max HP</label>
+        <input type="number" ng-model="participant.data.maxhp">
+    </md-input-container>
+</div>
+<div layout="row" flex class="stat-input">
+    <md-input-container>
+        <label>STR <span ng-show="participant.stats.str>=0">({{calcMod(participant.stats.str)}})</span></label>
+        <input min="0" type="number" ng-model="participant.data.stats.str">
+    </md-input-container>
+    <md-input-container>
+        <label>DEX <span ng-show="participant.stats.dex>=0">({{calcMod(participant.stats.dex)}})</span></label>
+        <input type="number" ng-model="participant.data.stats.dex">
+    </md-input-container>
+    <md-input-container>
+        <label>CON <span ng-show="participant.stats.con>=0">({{calcMod(participant.stats.con)}})</span></label>
+        <input type="number" ng-model="participant.data.stats.con">
+    </md-input-container>
+    <md-input-container>
+        <label>INT <span ng-show="participant.stats.int>=0">({{calcMod(participant.stats.int)}})</span></label>
+        <input type="number" ng-model="participant.data.stats.int">
+    </md-input-container>
+    <md-input-container>
+        <label>WIS <span ng-show="participant.stats.wis>=0">({{calcMod(participant.stats.wis)}})</span></label>
+        <input type="number" ng-model="participant.data.stats.wis">
+    </md-input-container>
+    <md-input-container>
+        <label>CHA <span ng-show="participant.stats.cha>=0">({{calcMod(participant.stats.cha)}})</span></label>
+        <input type="number" ng-model="participant.data.stats.cha">
+    </md-input-container>
+</div>

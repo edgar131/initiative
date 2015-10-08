@@ -1,0 +1,13 @@
+<md-dialog style="background-color:lightgray">
+    <form name="pform">
+    <md-dialog-content>
+        <h2 md-title>Participant</h2>
+        <div combat-info-form participant="participant"></div>
+        <div participant-info-form participant="participant"></div>
+    </md-dialog-content>
+    <div class="md-actions" layout="row">
+        <md-button ng-disabled="!pform.$valid" type="submit" class="md-raised md-primary" ng-click="add()">{{::editMode ? 'Save' : 'Add'}}</md-button>
+        <md-button type="reset" class="md-raised" ng-click="cancel()">Cancel</md-button>
+    </div>
+    </form>
+</md-dialog>

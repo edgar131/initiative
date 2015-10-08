@@ -1,0 +1,29 @@
+<md-dialog style="background-color:lightgray">
+    <form name="pform">
+        <md-dialog-content>
+            <h2 md-title>Party</h2>
+            <md-input-container>
+                <label>Party</label>
+                <md-select ng-init="selParty = newParty" ng-model="selParty" ng-change="partyname = selParty.name">
+                    <md-option ng-value="newParty">--- New Party ---</md-option>
+                    <md-option ng-repeat="party in parties" ng-value="party">
+                        {{party.name}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container>
+                <label>Party Name</label>
+                <input required type="text" name="partyname" ng-model="partyname">
+                <div ng-messages="pform.partyname.$error" ng-if="pform.partyname.$touched">
+                    <div ng-message="required" ng-show="pform.partyname.$error">You have to name your party</div>
+                </div>
+            </md-input-container>
+        </md-dialog-content>
+        <div class="md-actions" layout="row">
+            <md-button ng-disabled="selParty === newParty" class="md-raised md-warn" ng-click="delete()">Delete</md-button>
+            <md-button ng-disabled="selParty === newParty" class="md-raised md-primary" ng-click="addToEncounter()">Add To Encounter</md-button>
+            <md-button ng-disabled="!pform.$valid" type="submit" class="md-raised md-primary" ng-click="save()">{{selParty !== newParty ? 'Overwrite' : 'Save'}}</md-button>
+            <md-button type="reset" class="md-raised" ng-click="cancel()">Cancel</md-button>
+        </div>
+    </form>
+</md-dialog>
