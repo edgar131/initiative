@@ -1,14 +1,14 @@
 <div layout="row" flex>
     <md-input-container>
         <label>Initiative</label>
-        <input required type="number" name="initiative" ng-model="participant.combat.initiative">
+        <input required type="number" name="initiative" ng-model="combatant.combat.initiative">
         <div ng-messages="pform.initiative.$error" ng-if="pform.initiative.$touched">
             <div ng-message="required" ng-show="pform.initiative.$error">You need an initiative</div>
         </div>
     </md-input-container>
     <md-input-container>
         <label>Current HP</label>
-        <input required type="number" name="hp" ng-model="participant.combat.hp">
+        <input required type="number" name="hp" ng-model="combatant.combat.hp">
         <div ng-messages="pform.hp.$error" ng-if="pform.hp.$touched">
             <div ng-message="required" ng-show="pform.hp.$error">You need hp</div>
         </div>

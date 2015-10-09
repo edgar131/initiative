@@ -1,0 +1,43 @@
+<md-input-container>
+    <label>Name</label>
+    <input required type="text" name="name" ng-model="combatant.data.name">
+    <div ng-messages="pform.name.$error" ng-if="pform.name.$touched">
+        <div ng-message="required" ng-show="pform.name.$error">You need a name</div>
+    </div>
+</md-input-container>
+<div layout="row" flex>
+    <md-input-container>
+        <label>AC</label>
+        <input type="number" ng-model="combatant.data.ac">
+    </md-input-container>
+    <md-input-container>
+        <label>Max HP</label>
+        <input type="number" ng-model="combatant.data.maxhp">
+    </md-input-container>
+</div>
+<div layout="row" flex class="stat-input">
+    <md-input-container>
+        <label>STR <span ng-show="combatant.data.stats.str>=0">({{calcMod(combatant.data.stats.str)}})</span></label>
+        <input min="0" type="number" ng-model="combatant.data.stats.str">
+    </md-input-container>
+    <md-input-container>
+        <label>DEX <span ng-show="combatant.data.stats.dex>=0">({{calcMod(combatant.data.stats.dex)}})</span></label>
+        <input min="0" type="number" ng-model="combatant.data.stats.dex">
+    </md-input-container>
+    <md-input-container>
+        <label>CON <span ng-show="combatant.data.stats.con>=0">({{calcMod(combatant.data.stats.con)}})</span></label>
+        <input min="0" type="number" ng-model="combatant.data.stats.con">
+    </md-input-container>
+    <md-input-container>
+        <label>INT <span ng-show="combatant.data.stats.int>=0">({{calcMod(combatant.data.stats.int)}})</span></label>
+        <input min="0" type="number" ng-model="combatant.data.stats.int">
+    </md-input-container>
+    <md-input-container>
+        <label>WIS <span ng-show="combatant.data.stats.wis>=0">({{calcMod(combatant.data.stats.wis)}})</span></label>
+        <input min="0" type="number" ng-model="combatant.data.stats.wis">
+    </md-input-container>
+    <md-input-container>
+        <label>CHA <span ng-show="combatant.data.stats.cha>=0">({{calcMod(combatant.data.stats.cha)}})</span></label>
+        <input min="0" type="number" ng-model="combatant.data.stats.cha">
+    </md-input-container>
+</div>

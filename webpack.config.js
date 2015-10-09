@@ -4,10 +4,10 @@ var path = require('path');
 module.exports = {
     context: path.join(__dirname, "/app"),
     entry: {
-        app: ["webpack/hot/dev-server", "angular", "./index.js"]
+        app: ["angular", "./index.js"]
     },
     output: {
-        path: "./app",
+        path: "./dist",
         filename: "bundle.js"
     },
     resolve: {
@@ -20,7 +20,8 @@ module.exports = {
             { test: /\.js$/, loader: 'imports?angular', include: /app/},
             { test: /\.tpl\.html$/, loader: "raw" },
             { test: /\.css$/, loader: "style!css" },
-            { test: /\.less/, loader: "style!css!less" }
+            { test: /\.less/, loader: "style!css!less" },
+            { test: /\.svg$/, loader: "url" }
         ]
     }
 };

@@ -10,22 +10,21 @@ require('./encounter.less');
 angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
     .config(['$mdIconProvider', function($mdIconProvider) {
         $mdIconProvider
-            .iconSet('action', '/assets/action-icons.svg', 24)
-            .iconSet('alert', '/assets/alert-icons.svg', 24)
-            .iconSet('av', '/assets/av-icons.svg', 24)
-            .iconSet('communication', '/assets/communication-icons.svg', 24)
-            .iconSet('content', '/assets/content-icons.svg', 24)
-            .iconSet('device', '/assets/device-icons.svg', 24)
-            .iconSet('editor', '/assets/editor-icons.svg', 24)
-            .iconSet('file', '/assets/file-icons.svg', 24)
-            .iconSet('hardware', '/assets/hardware-icons.svg', 24)
-            .iconSet('icons', '/assets/icons-icons.svg', 24)
-            .iconSet('image', '/assets/image-icons.svg', 24)
-            .iconSet('maps', '/assets/maps-icons.svg', 24)
-            .iconSet('navigation', '/assets/navigation-icons.svg', 24)
-            .iconSet('notification', '/assets/notification-icons.svg', 24)
-            .iconSet('social', '/assets/social-icons.svg', 24)
-            .iconSet('toggle', '/assets/toggle-icons.svg', 24)
+            .iconSet('action', require('./assets/action-icons.svg'), 24)
+            .iconSet('alert', require('./assets/alert-icons.svg'), 24)
+            .iconSet('av', require('./assets/av-icons.svg'), 24)
+            .iconSet('communication', require('./assets/communication-icons.svg'), 24)
+            .iconSet('content', require('./assets/content-icons.svg'), 24)
+            .iconSet('device', require('./assets/device-icons.svg'), 24)
+            .iconSet('editor', require('./assets/editor-icons.svg'), 24)
+            .iconSet('file', require('./assets/file-icons.svg'), 24)
+            .iconSet('hardware', require('./assets/hardware-icons.svg'), 24)
+            .iconSet('image', require('./assets/image-icons.svg'), 24)
+            .iconSet('maps', require('./assets/maps-icons.svg'), 24)
+            .iconSet('navigation', require('./assets/navigation-icons.svg'), 24)
+            .iconSet('notification', require('./assets/notification-icons.svg'), 24)
+            .iconSet('social', require('./assets/social-icons.svg'), 24)
+            .iconSet('toggle', require('./assets/toggle-icons.svg'), 24)
     }])
 
     .factory('util', function(){
@@ -52,7 +51,8 @@ angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
             bindToController: true,
             controller: function($scope, $mdDialog, $localStorage, util){
                 var ctrl = this;
-                ctrl.participants = [{
+                ctrl.combatants = [];
+                /*ctrl.combatants = [{
                     combat: {
                         initiative: 10,
                         hp: 22
@@ -106,41 +106,43 @@ angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
                             cha: 12
                         }
                     }
-                }];
+                }];*/
                 ctrl.activeIndex = 0;
                 ctrl.calcMod = util.calcModAsString;
-                ctrl.modHP = function(participant, damage){
-                    participant.combat.hp += damage;
-                };
-                ctrl.removeParticipant = function(participant){
-                    var idx = $scope.participants.indexOf(participant)
-                    ctrl.participants.splice(idx, 1);
-                    if(idx >= $scope.participants.length){
-                        $scope.activeIndex = 0;
+                ctrl.modHP = function(combatant, damage){
+                    if(!isNaN(damage)){
+                        combatant.combat.hp += damage;
                     }
                 };
-                ctrl.editParticipant = function($event, participant){
+                ctrl.removeCombatant = function(combatant){
+                    var idx = ctrl.combatants.indexOf(combatant)
+                    ctrl.combatants.splice(idx, 1);
+                    if(idx >= ctrl.combatants.length){
+                        ctrl.activeIndex = 0;
+                    }
+                };
+                ctrl.editCombatant = function($event, combatant){
                     var scope = $scope.$new();
-                    scope.participant = angular.copy(participant);
+                    scope.combatant = angular.copy(combatant);
                     scope.editMode = true;
                     $mdDialog.show({
                         scope: scope,
-                        template: require('./addParticipant.tpl.html'),
+                        template: require('./addCombatant.tpl.html'),
                         targetEvent: $event,
-                        controller: 'addParticipant',
+                        controller: 'addCombatant',
                         clickOutsideToClose: true
-                    }).then(function(editParticipant){
-                        ctrl.participants[ctrl.participants.indexOf(participant)] = editParticipant;
+                    }).then(function(editcombatant){
+                        ctrl.combatants[ctrl.combatants.indexOf(combatant)] = editcombatant;
                     });
                 };
-                ctrl.addParticipant = function($event){
+                ctrl.addCombatant = function($event){
                     $mdDialog.show({
-                        template: require('./addParticipant.tpl.html'),
+                        template: require('./addCombatant.tpl.html'),
                         targetEvent: $event,
-                        controller: 'addParticipant',
+                        controller: 'addCombatant',
                         clickOutsideToClose: true
-                    }).then(function(participant){
-                        ctrl.participants.push(participant);
+                    }).then(function(combatant){
+                        ctrl.combatants.push(combatant);
                     });
                 };
                 ctrl.saveParty = function($event){
@@ -148,58 +150,61 @@ angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
                         template: require('./party.tpl.html'),
                         targetEvent: $event,
                         controller: function($scope, $mdBottomSheet){
+                            $scope.state = 'create';
+                            $scope.tabIndex = 0;
                             $scope.newParty = {
                                 name: "New Party"
                             };
                             $scope.parties = $localStorage.parties;
                             $scope.save = function(){
-                                $mdDialog.hide({
-                                    name: $scope.partyname,
-                                    party: $scope.selParty
+                                var saveParty = angular.copy(ctrl.combatants);
+                                angular.forEach(saveParty, function(combatant){
+                                    delete combatant.combat;
                                 });
+                                if($localStorage.parties === undefined){
+                                    $localStorage.parties = [];
+                                }
+                                var idx = $localStorage.parties.indexOf($scope.selParty);
+                                if(idx >= 0){
+                                    $localStorage.parties[idx] = {
+                                        name: $scope.partyname,
+                                        combatants: saveParty
+                                    };
+                                } else {
+                                    $localStorage.parties.push({
+                                        name: $scope.partyname,
+                                        combatants: saveParty
+                                    });
+                                }
+                                $mdDialog.hide();
                             };
                             $scope.delete = function(){
                                 if($scope.selParty !== $scope.newParty){
+                                    $localStorage.parties.splice($localStorage.parties.indexOf($scope.selParty), 1);
                                     $scope.selParty = $scope.newParty;
                                     $scope.partyname = undefined;
-                                    $localStorage.parties.splice($localStorage.parties.indexOf($scope.selParty), 1);
                                 }
                             };
-                            $scope.addToEncounter = function(){
-                                $mdBottomSheet.show({
-                                    template: '<md-bottom-sheet>TEST</md-bottom-sheet>',
-                                    parent: $event.target
-                                });
-                                /*if($scope.selParty !== $scope.newParty){
-                                    ctrl.participants = ctrl.participants.concat($scope.selParty.participants);
-                                }*/
+                            $scope.editPartyForEncounter = function(){
+                                $scope.state = 'add';
+                                $scope.saveParty = angular.copy($scope.selParty);
+                            };
+                            $scope.addPartyToEncounter = function () {
+                                if ($scope.selParty !== $scope.newParty) {
+                                    ctrl.combatants = ctrl.combatants.concat($scope.saveParty.combatants);
+                                }
+                                $mdDialog.hide();
                             };
                             $scope.cancel = function(){
                                 $mdDialog.cancel();
                             };
                         },
                         clickOutsideToClose: true
-                    }).then(function(resp){
-                        if($localStorage.parties === undefined){
-                            $localStorage.parties = [];
-                        }
-                        var idx = $localStorage.parties.indexOf(resp.party);
-                        if(idx >= 0){
-                            $localStorage.parties[idx] = {
-                                name: resp.name,
-                                participants: ctrl.participants
-                            };
-                        } else {
-                            $localStorage.parties.push({
-                                name: resp.name,
-                                participants: ctrl.participants
-                            });
-                        }
                     });
                 };
                 ctrl.next = function(){
                     ctrl.activeIndex++;
-                    if(ctrl.activeIndex >= ctrl.participants.length){
+                    if(ctrl.activeIndex >= ctrl.combatants.length){
                         ctrl.activeIndex = 0;
                     }
                 };
@@ -207,10 +212,10 @@ angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
         };
     })
 
-    .directive('participantInfoForm', function(){
+    .directive('combatantInfoForm', function(){
         return {
             scope: {
-                participant: '='
+                combatant: '='
             },
             require: '^form',
             link: function(scope, element, attrs, form){
@@ -219,14 +224,14 @@ angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
             controller: function($scope, util){
                 $scope.calcMod = util.calcModAsString;
             },
-            template: require('./participant-info-form.tpl.html')
+            template: require('./combatant-info-form.tpl.html')
         };
     })
 
     .directive('combatInfoForm', function(){
         return {
             scope: {
-                participant: '='
+                combatant: '='
             },
             require: '^form',
             link: function(scope, element, attrs, form){
@@ -236,10 +241,10 @@ angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
         };
     })
 
-    .controller('addParticipant', function($scope, $mdDialog, util){
+    .controller('addCombatant', function($scope, $mdDialog, util){
         $scope.calcMod = util.calcModAsString;
         $scope.add = function(){
-            $mdDialog.hide($scope.participant);
+            $mdDialog.hide($scope.combatant);
         };
         $scope.cancel = function(){
             $mdDialog.cancel();
