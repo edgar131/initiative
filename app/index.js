@@ -185,7 +185,8 @@ angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
                                     $scope.partyname = undefined;
                                 }
                             };
-                            $scope.editPartyForEncounter = function(){
+                            $scope.editPartyForEncounter = function($event){
+                                $event.preventDefault();
                                 $scope.state = 'add';
                                 $scope.saveParty = angular.copy($scope.selParty);
                             };

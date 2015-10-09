@@ -29,7 +29,7 @@
         </md-dialog-content>
         <div class="md-actions" layout="row" ng-show="state === 'create'">
             <md-button ng-disabled="selParty === newParty" class="md-raised md-warn" ng-click="delete()">Delete</md-button>
-            <md-button ng-disabled="selParty === newParty" class="md-raised md-primary" ng-click="editPartyForEncounter()">Add To Encounter</md-button>
+            <md-button ng-disabled="selParty === newParty" class="md-raised md-primary" ng-click="editPartyForEncounter($event)">Add To Encounter</md-button>
             <md-button ng-disabled="!pform.$valid" type="submit" class="md-raised md-primary" ng-click="save()">{{selParty !== newParty ? 'Overwrite' : 'Save'}}</md-button>
             <md-button type="reset" class="md-raised" ng-click="cancel()">Cancel</md-button>
         </div>
