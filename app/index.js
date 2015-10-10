@@ -52,7 +52,7 @@ angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
             controller: function($scope, $mdDialog, $localStorage, util){
                 var ctrl = this;
                 ctrl.combatants = [];
-                /*ctrl.combatants = [{
+                ctrl.combatants = [{
                     combat: {
                         initiative: 10,
                         hp: 22
@@ -106,7 +106,7 @@ angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
                             cha: 12
                         }
                     }
-                }];*/
+                }];
                 ctrl.activeIndex = 0;
                 ctrl.calcMod = util.calcModAsString;
                 ctrl.modHP = function(combatant, damage){
@@ -114,12 +114,18 @@ angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
                         combatant.combat.hp += damage;
                     }
                 };
-                ctrl.removeCombatant = function(combatant){
-                    var idx = ctrl.combatants.indexOf(combatant)
-                    ctrl.combatants.splice(idx, 1);
-                    if(idx >= ctrl.combatants.length){
-                        ctrl.activeIndex = 0;
-                    }
+                ctrl.removeCombatant = function($event, combatant){
+                    $mdDialog.show($mdDialog.confirm()
+                        .ok('Remove')
+                        .cancel('Cancel')
+                        .title('Are you sure you wish to remove ' + combatant.data.name + ' from the encounter?')
+                        .targetEvent($event)).then(function(){
+                        var idx = ctrl.combatants.indexOf(combatant);
+                        ctrl.combatants.splice(idx, 1);
+                        if(idx >= ctrl.combatants.length){
+                            ctrl.activeIndex = 0;
+                        }
+                    });
                 };
                 ctrl.editCombatant = function($event, combatant){
                     var scope = $scope.$new();
@@ -150,6 +156,7 @@ angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
                         template: require('./party.tpl.html'),
                         targetEvent: $event,
                         controller: function($scope, $mdBottomSheet){
+                            $scope.saveable = ctrl.combatants.length > 0;
                             $scope.state = 'create';
                             $scope.tabIndex = 0;
                             $scope.newParty = {
