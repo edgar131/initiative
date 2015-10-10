@@ -52,7 +52,7 @@ angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
             controller: function($scope, $mdDialog, $localStorage, util){
                 var ctrl = this;
                 ctrl.combatants = [];
-                ctrl.combatants = [{
+                /*ctrl.combatants = [{
                     combat: {
                         initiative: 10,
                         hp: 22
@@ -106,7 +106,7 @@ angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
                             cha: 12
                         }
                     }
-                }];
+                }];*/
                 ctrl.activeIndex = 0;
                 ctrl.calcMod = util.calcModAsString;
                 ctrl.modHP = function(combatant, damage){
