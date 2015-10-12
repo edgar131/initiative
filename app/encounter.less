@@ -1,0 +1,79 @@
+body * {
+  box-sizing: border-box;
+}
+[combatant-info-form] {
+  .stat-input {
+    input {
+      width: 70px;
+    }
+  }
+}
+.party-dialog {
+  background-color:lightgray;
+  .md-whiteframe-2dp {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+  }
+}
+md-dialog {
+  background-color: lightgray;
+}
+.combatant {
+  @padding: 15px;
+  @border-size: 4px;
+  border-radius: 6px;
+  -webkit-box-shadow: 1px 1px 6px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 1px 6px 0px rgba(0,0,0,0.75);
+  box-shadow: 1px 1px 6px 0px rgba(0,0,0,0.75);
+  padding: 5px;
+  padding-left:@padding;
+  margin: 5px 10px;
+  position:relative;
+  clear:both;
+  overflow:hidden;
+  &.active {
+    -webkit-box-shadow: 1px 1px 6px 0px rgba(0,0,255,0.75);
+    -moz-box-shadow: 1px 1px 6px 0px rgba(0,0,255,0.75);
+    box-shadow: 1px 1px 6px 0px rgba(0,0,255,0.75);
+    border-left: @border-size solid blue;
+    padding-left: (@padding - @border-size);
+  }
+  .info {
+    float:left;
+    .hp {
+      font-weight:bold;
+      &.hp-warning {
+        color: red;
+      }
+    }
+    .ac, .init {
+      font-weight:bold;
+      font-size: .8em;
+    }
+    .name {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .stats {
+      font-size:.8em;
+      .stat {
+        font-weight:600;
+        display:block;
+        float:left;
+        width: 75px;
+        margin-right:8px;
+      }
+    }
+  }
+  .hpmod {
+    float:left;
+  }
+  .controls {
+    float:right;
+    md-icon {
+      outline: none;
+      cursor: pointer;
+    }
+  }
+}

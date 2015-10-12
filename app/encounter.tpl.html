@@ -1,0 +1,53 @@
+<md-content>
+    <header>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h3>
+                    <span>Initiative</span>
+                </h3>
+            </div>
+        </md-toolbar>
+        <div layout="row">
+            <md-button ng-click="encounterCtrl.addCombatant($event)" class="md-raised">
+                <md-icon md-svg-src="content:add_box" class="md-primary"></md-icon>
+                combatant
+            </md-button>
+            <md-button ng-click="encounterCtrl.saveParty($event)" class="md-raised">
+                <md-icon md-svg-src="social:group_add" class="md-primary"></md-icon>
+                Party
+            </md-button>
+            <md-button ng-click="encounterCtrl.next($event)" class="md-raised">
+                <md-icon md-svg-src="av:play_circle_outline" class="md-primary"></md-icon>
+                Next
+            </md-button>
+        </div>
+    </header>
+    <main>
+        <div class="combatant" ng-class="{'active':$index === encounterCtrl.activeIndex}" ng-repeat="combatant in encounterCtrl.combatants | orderBy:['-combat.initiative', '-data.stats.dex']">
+            <div layout="column" class="info">
+                <div layout="row">
+                    <span class="name">{{combatant.data.name}}&nbsp;</span>
+                    <span ng-class="{'hp-warning': combatant.combat.hp <= 0}" class="hp">({{combatant.combat.hp}}<span ng-show="combatant.data.maxhp">/{{combatant.data.maxhp}}</span>)&nbsp;</span>
+                    <span class="ac" ng-show="combatant.data.ac">AC: {{combatant.data.ac}},&nbsp;</span>
+                    <span class="init" ng-show="combatant.combat.initiative">Initiative: {{combatant.combat.initiative}}</span>
+                </div>
+                <div layout="row" layout-wrap class="stats" ng-show="combatant.data.stats">
+                    <div ng-repeat="(key, stat) in combatant.data.stats" ng-show="stat !== null && stat >= 0" class="stat">{{key | uppercase}}: {{stat}}<sup>({{encounterCtrl.calcMod(stat)}})</sup></div>
+                </div>
+            </div>
+            <div layout="row" layout-align="center center" class="hpmod">
+                <md-button class="md-raised md-primary" ng-click="encounterCtrl.modHP(combatant, damage);damage=undefined;">Heal</md-button>
+                <input style="vertical-align:middle;width:60px;" type="number" ng-model="damage">
+                <md-button class="md-raised md-warn" ng-click="encounterCtrl.modHP(combatant, -damage);damage=undefined;">Damage</md-button>
+            </div>
+            <div layout="row" layout-align="end center" class="controls">
+                <md-button ng-click="encounterCtrl.editCombatant($event, combatant)" class="md-icon-button md-raised">
+                    <md-icon md-svg-src="editor:mode_edit"></md-icon>
+                </md-button>
+                <md-button ng-click="encounterCtrl.removeCombatant($event, combatant)" class="md-icon-button md-raised">
+                    <md-icon md-svg-src="navigation:close"></md-icon>
+                </md-button>
+            </div>
+        </div>
+    </main>
+</md-content>

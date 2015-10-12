@@ -1,0 +1,23 @@
+<md-input-container>
+    <label>Name</label>
+    <input required type="text" name="name" ng-model="combatant.data.name">
+    <div ng-messages="pform.name.$error" ng-if="pform.name.$touched">
+        <div ng-message="required" ng-show="pform.name.$error">You need a name</div>
+    </div>
+</md-input-container>
+<div layout="row" flex>
+    <md-input-container>
+        <label>AC</label>
+        <input type="number" ng-model="combatant.data.ac">
+    </md-input-container>
+    <md-input-container>
+        <label>Max HP</label>
+        <input type="number" ng-model="combatant.data.maxhp">
+    </md-input-container>
+</div>
+<div layout="row" flex class="stat-input">
+    <md-input-container ng-repeat="stat in stats">
+        <label>{{::stat | uppercase}} <span ng-show="combatant.data.stats[stat] !== null && combatant.data.stats[stat] >=0 ">({{calcMod(combatant.data.stats[stat])}})</span></label>
+        <input min="0" type="number" ng-model="combatant.data.stats[stat]">
+    </md-input-container>
+</div>
