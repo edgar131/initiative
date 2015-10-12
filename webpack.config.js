@@ -1,13 +1,21 @@
 var webpack = require('webpack');
 var path = require('path');
 
+var args = {};
+process.argv.forEach(function (val, index, array) {
+    if(val.startsWith('--')){
+        val = val.substring(2);
+        args[val.split('=')[0]] = val.split('=')[1];
+    }
+});
+
 module.exports = {
     context: path.join(__dirname, "/app"),
     entry: {
-        app: ["webpack/hot/dev-server", "angular", "./index.js"]
+        app: ["angular", "./index.js"]
     },
     output: {
-        path: "./app",
+        path: "./dist",
         filename: "bundle.js"
     },
     resolve: {
