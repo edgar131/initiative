@@ -4,10 +4,10 @@ var path = require('path');
 module.exports = {
     context: path.join(__dirname, "/app"),
     entry: {
-        app: ["angular", "./index.js"]
+        app: ["webpack/hot/dev-server", "angular", "./index.js"]
     },
     output: {
-        path: "./dist",
+        path: "./app",
         filename: "bundle.js"
     },
     resolve: {

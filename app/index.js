@@ -231,6 +231,7 @@ angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
             },
             controller: function($scope, util){
                 $scope.calcMod = util.calcModAsString;
+                $scope.stats = ["str", "dex", "con", "int", "wis", "cha"];
             },
             template: require('./combatant-info-form.tpl.html')
         };
