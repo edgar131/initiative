@@ -1,4 +1,4 @@
-<md-content>
+<md-content layout="column" layout-fill>
     <header>
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -22,7 +22,7 @@
             </md-button>
         </div>
     </header>
-    <main>
+    <main flex>
         <div class="combatant" ng-class="{'active':$index === encounterCtrl.activeIndex}" ng-repeat="combatant in encounterCtrl.combatants | orderBy:['-combat.initiative', '-data.stats.dex']">
             <div layout="column" class="info">
                 <div layout="row">
