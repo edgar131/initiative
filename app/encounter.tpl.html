@@ -7,45 +7,59 @@
                 </h3>
             </div>
         </md-toolbar>
-        <div layout="row">
-            <md-button ng-click="encounterCtrl.addCombatant($event)" class="md-raised">
-                <md-icon md-svg-src="content:add_box" class="md-primary"></md-icon>
+        <div layout="row" id="controls">
+            <md-button ng-click="$ctrl.addCombatant($event)" class="md-raised">
+                <md-icon md-svg-src="content:add_box"></md-icon>
                 combatant
             </md-button>
-            <md-button ng-click="encounterCtrl.saveParty($event)" class="md-raised">
-                <md-icon md-svg-src="social:group_add" class="md-primary"></md-icon>
+            <md-button ng-click="$ctrl.saveParty($event)" class="md-raised">
+                <md-icon md-svg-src="social:group_add"></md-icon>
                 Party
             </md-button>
-            <md-button ng-click="encounterCtrl.next($event)" class="md-raised">
-                <md-icon md-svg-src="av:play_circle_outline" class="md-primary"></md-icon>
+            <md-button ng-click="$ctrl.next($event)" class="md-raised">
+                <md-icon md-svg-src="av:play_circle_outline"></md-icon>
                 Next
             </md-button>
         </div>
     </header>
     <main flex>
-        <div class="combatant" ng-class="{'active':$index === encounterCtrl.activeIndex}" ng-repeat="combatant in encounterCtrl.combatants | orderBy:['-combat.initiative', '-data.stats.dex']">
+        <div class="combatant" ng-class="{'active':$index === $ctrl.activeIndex}"
+             ng-repeat="combatant in $ctrl.combatants | orderBy:['-combat.initiative', '-data.stats.dex']">
             <div layout="column" class="info">
                 <div layout="row">
                     <span class="name">{{combatant.data.name}}&nbsp;</span>
-                    <span ng-class="{'hp-warning': combatant.combat.hp <= 0}" class="hp">({{combatant.combat.hp}}<span ng-show="combatant.data.maxhp">/{{combatant.data.maxhp}}</span>)&nbsp;</span>
+                    <span ng-class="{'hp-warning': combatant.combat.hp <= 0}" class="hp">({{combatant.combat.hp}}<span
+                            ng-show="combatant.data.maxhp">/{{combatant.data.maxhp}}</span>)&nbsp;</span>
                     <span class="ac" ng-show="combatant.data.ac">AC: {{combatant.data.ac}},&nbsp;</span>
-                    <span class="init" ng-show="combatant.combat.initiative">Initiative: {{combatant.combat.initiative}}</span>
+                    <span class="init"
+                          ng-show="combatant.combat.initiative">INIT: {{combatant.combat.initiative}}</span>
                 </div>
                 <div layout="row" layout-wrap class="stats" ng-show="combatant.data.stats">
-                    <div ng-repeat="(key, stat) in combatant.data.stats" ng-show="stat !== null && stat >= 0" class="stat">{{key | uppercase}}: {{stat}}<sup>({{encounterCtrl.calcMod(stat)}})</sup></div>
+                    <div ng-repeat="(key, stat) in combatant.data.stats" ng-show="stat !== null && stat >= 0"
+                         class="stat">{{key | uppercase}}: {{stat}}<sup>({{$ctrl.calcMod(stat)}})</sup></div>
                 </div>
             </div>
             <div layout="row" layout-align="center center" class="hpmod">
-                <md-button class="md-raised md-primary" ng-click="encounterCtrl.modHP(combatant, damage);damage=undefined;">Heal</md-button>
+                <md-button class="md-raised md-primary" ng-click="$ctrl.modHP(combatant, damage);damage=undefined;">
+                    Heal
+                </md-button>
                 <input style="vertical-align:middle;width:60px;" type="number" ng-model="damage">
-                <md-button class="md-raised md-warn" ng-click="encounterCtrl.modHP(combatant, -damage);damage=undefined;">Damage</md-button>
+                <md-button class="md-raised md-warn" ng-click="$ctrl.modHP(combatant, -damage);damage=undefined;">
+                    Damage
+                </md-button>
             </div>
             <div layout="row" layout-align="end center" class="controls">
-                <md-button ng-click="encounterCtrl.editCombatant($event, combatant)" class="md-icon-button md-raised">
+                <md-button ng-click="$ctrl.editCombatant($event, combatant)" class="md-icon-button md-raised">
+                    <md-tooltip md-direction="bottom">Edit</md-tooltip>
                     <md-icon md-svg-src="editor:mode_edit"></md-icon>
                 </md-button>
-                <md-button ng-click="encounterCtrl.removeCombatant($event, combatant)" class="md-icon-button md-raised">
+                <md-button ng-click="$ctrl.removeCombatant($event, combatant)" class="md-icon-button md-raised">
+                    <md-tooltip md-direction="bottom">Remove</md-tooltip>
                     <md-icon md-svg-src="navigation:close"></md-icon>
+                </md-button>
+                <md-button ng-click="$ctrl.cloneCombatant($event, combatant)" class="md-icon-button md-raised">
+                    <md-tooltip md-direction="bottom">Clone</md-tooltip>
+                    <md-icon md-svg-src="content:content_copy"></md-icon>
                 </md-button>
             </div>
         </div>

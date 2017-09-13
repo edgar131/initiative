@@ -1,24 +1,24 @@
 <md-input-container>
     <label>Name</label>
-    <input required type="text" name="name" ng-model="combatant.data.name">
-    <div ng-messages="pform.name.$error" ng-if="pform.name.$touched">
-        <div ng-message="required" ng-show="pform.name.$error">You need a name</div>
+    <input required type="text" name="name" ng-model="$ctrl.combatant.data.name">
+    <div ng-messages="$ctrl.pform.name.$error" ng-if="$ctrl.pform.name.$touched">
+        <div ng-message="required" ng-show="$ctrl.pform.name.$error">You need a name</div>
     </div>
 </md-input-container>
 <h3>Optional Stats</h3>
 <div layout="row" layout-wrap flex>
     <md-input-container>
         <label>AC</label>
-        <input type="number" ng-model="combatant.data.ac">
+        <input type="number" ng-model="$ctrl.combatant.data.ac">
     </md-input-container>
     <md-input-container>
         <label>Max HP</label>
-        <input type="number" ng-model="combatant.data.maxhp">
+        <input type="number" ng-model="$ctrl.combatant.data.maxhp">
     </md-input-container>
 </div>
 <div layout="row" layout-wrap flex class="stat-input">
-    <md-input-container ng-repeat="stat in stats">
-        <label>{{::stat | uppercase}} <span ng-show="combatant.data.stats[stat] !== null && combatant.data.stats[stat] >=0 ">({{calcMod(combatant.data.stats[stat])}})</span></label>
-        <input min="0" type="number" ng-model="combatant.data.stats[stat]">
+    <md-input-container ng-repeat="stat in $ctrl.stats">
+        <label>{{::stat | uppercase}} <span ng-show="$ctrl.combatant.data.stats[stat] !== null && $ctrl.combatant.data.stats[stat] >=0 ">({{$ctrl.calcMod($ctrl.combatant.data.stats[stat])}})</span></label>
+        <input min="0" type="number" ng-model="$ctrl.combatant.data.stats[stat]">
     </md-input-container>
 </div>
