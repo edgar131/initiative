@@ -7,6 +7,8 @@ require('angular-messages');
 require('ngstorage');
 require('angular-material/angular-material.min.css');
 require('./encounter.less');
+require('./assets/5e-SRD-Monsters.json');
+
 angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
     .config(['$mdIconProvider', function ($mdIconProvider) {
         $mdIconProvider
@@ -44,10 +46,31 @@ angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
         };
     })
 
+    .service('monsterService', function($http) {
+        var monsters;
+
+        $http.get("/assets/5e-SRD-Monsters.json").then(function(resp) {
+            monsters = resp.data;
+        }, function() {
+            monsters = [];
+        });
+
+        this.getMonsters = function() {
+            return monsters;
+        };
+    })
+
     .component('encounter', {
         template: require('./encounter.tpl.html'),
-        controller: function ($scope, $mdDialog, $localStorage, util) {
+        controller: function ($scope, $mdDialog, $localStorage, monsterService, $q, util) {
             var addCombatantCtrl = function ($scope, $mdDialog, util) {
+                if (!$scope.combatant) {
+                    $scope.combatant = {
+                        combat: {},
+                        data: { stats: {}}
+                    };
+                }
+                $scope.monsters = monsterService.getMonsters();
                 $scope.calcMod = util.calcModAsString;
                 $scope.add = function () {
                     $mdDialog.hide($scope.combatant);
@@ -57,6 +80,28 @@ angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
                 };
                 $scope.validateStat = function (stat) {
                     return !isNaN(stat)
+                };
+                $scope.monsterQuery = function(query) {
+                    var deferred = $q.defer();
+                    deferred.resolve($scope.monsters.filter(function(monster){
+                        return monster.name && monster.name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
+                    }));
+                    return deferred.promise;
+                };
+                $scope.monsterSelected = function(monster) {
+                    if (monster) {
+                        $scope.combatant.combat.hp = monster.hit_points;
+                        $scope.combatant.combat.initiative = 10 + util.calcMod(monster.dexterity);
+                        $scope.combatant.data.name = monster.name;
+                        $scope.combatant.data.ac = monster.armor_class;
+                        $scope.combatant.data.maxhp = monster.hit_points;
+                        $scope.combatant.data.stats.dex = monster.dexterity;
+                        $scope.combatant.data.stats.str = monster.strength;
+                        $scope.combatant.data.stats.con = monster.constitution;
+                        $scope.combatant.data.stats.int = monster.intelligence;
+                        $scope.combatant.data.stats.wis = monster.wisdom;
+                        $scope.combatant.data.stats.cha = monster.charisma;
+                    }
                 };
             };
             var ctrl = this;

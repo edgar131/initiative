@@ -7,15 +7,26 @@
         </md-toolbar>
         <md-dialog-content>
             <div class="md-dialog-content">
+                <md-autocomplete md-selected-item="monster"
+                                 md-selected-item-change="monsterSelected(monster)"
+                                 md-search-text="searchText"
+                                 md-items="monster in monsterQuery(searchText)"
+                                 md-item-text="monster.name"
+                                 md-min-length="1"
+                                 placeholder="Enter Monster Name">
+                    <md-item-template>
+                        <span md-highlight-text="searchText" md-highlight-flags="^i">{{monster.name}}</span>
+                    </md-item-template>
+                </md-autocomplete>
                 <combat-info-form combatant="combatant" pform="pform"></combat-info-form>
                 <combatant-info-form combatant="combatant" pform="pform"></combatant-info-form>
             </div>
         </md-dialog-content>
-        <div class="md-actions" layout="row">
+        <md-dialog-actions layout="row">
             <md-button ng-disabled="!pform.$valid" type="submit" class="md-raised md-primary" ng-click="add()">
                 {{::editMode ? 'Save' : 'Add'}}
             </md-button>
             <md-button type="reset" class="md-raised" ng-click="cancel()">Cancel</md-button>
-        </div>
+        </md-dialog-actions>
     </form>
 </md-dialog>

@@ -27,6 +27,7 @@ module.exports = {
             { test: /\angular-.*.js$/, loader: "imports?angular"},
             { test: /\.js$/, loader: 'imports?angular', include: /app/},
             { test: /\.tpl\.html$/, loader: "raw" },
+            { test: /\.json$/, loader: "file?name=[path][name].[ext]"},
             { test: /\.css$/, loader: "style!css" },
             { test: /\.less/, loader: "style!css!less" },
             { test: /\.svg$/, loader: "url" }
