@@ -1,15 +1,14 @@
 'use strict';
 
-module.exports = 'app';
+import 'angular';
+import 'angular-material';
+import 'angular-messages';
+import 'ngstorage';
+import 'angular-material/angular-material.min.css';
+import './encounter.less';
+import './assets/5e-SRD-Monsters.json';
 
-require('angular-material');
-require('angular-messages');
-require('ngstorage');
-require('angular-material/angular-material.min.css');
-require('./encounter.less');
-require('./assets/5e-SRD-Monsters.json');
-
-angular.module(module.exports, ["ngMaterial", "ngMessages", "ngStorage"])
+export default angular.module('app', ["ngMaterial", "ngMessages", "ngStorage"])
     .config(['$mdIconProvider', function ($mdIconProvider) {
         $mdIconProvider
             .iconSet('action', require('./assets/action-icons.svg'), 24)

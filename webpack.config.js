@@ -1,36 +1,65 @@
-var webpack = require('webpack');
-var path = require('path');
+const path = require('path');
 
-var args = {};
+/*var args = {};
 process.argv.forEach(function (val, index, array) {
     if(val.startsWith('--')){
         val = val.substring(2);
         args[val.split('=')[0]] = val.split('=')[1];
     }
-});
+});*/
 
 module.exports = {
-    context: path.join(__dirname, "/app"),
-    entry: {
-        app: ["angular", "./index.js"]
-    },
+    entry: "./app/index",
     output: {
-        path: "./dist",
+        path: path.resolve(__dirname, "dist"),
         filename: "bundle.js"
     },
-    resolve: {
-        modulesDirectories: ["node_modules"]
-    },
     devtool: "source-map",
+    resolveLoader: {
+        modules: ["node_modules"]
+    },
     module: {
-        loaders: [
-            { test: /\angular-.*.js$/, loader: "imports?angular"},
-            { test: /\.js$/, loader: 'imports?angular', include: /app/},
-            { test: /\.tpl\.html$/, loader: "raw" },
-            { test: /\.json$/, loader: "file?name=[path][name].[ext]"},
-            { test: /\.css$/, loader: "style!css" },
-            { test: /\.less/, loader: "style!css!less" },
-            { test: /\.svg$/, loader: "url" }
+        rules: [
+            {
+                test: /\.js$/,
+                use: 'babel-loader',
+                exclude: path.resolve(__dirname, 'node_modules/')
+            },
+            {
+                test: /\.tpl\.html$/,
+                use: 'raw-loader',
+                exclude: path.resolve(__dirname, 'node_modules/')
+            },
+            {
+                test: /\.json$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[path][name].[ext]'
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    {loader: 'style-loader'},
+                    {loader: 'css-loader'}
+                ]
+            },
+            {
+                test: /\.less/,
+                use: [
+                    {loader: 'style-loader'},
+                    {loader: 'css-loader'},
+                    {loader: 'less-loader'}
+                ]
+            },
+            {
+                test: /\.svg$/,
+                use: [{loader: 'url-loader'}]
+            }
         ]
     }
 };
